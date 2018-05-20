@@ -50,7 +50,6 @@ public class TestScore4 {
         int[] moves = new int[42];
         for(int i=0; i < moves.length; i++) {
             moves[i] = i % 7 + 1;
-            System.out.println("moves[i] " + i + " " + moves[i]);
          }
          assert(testScore4.checkForValidMove(moves));
     }
