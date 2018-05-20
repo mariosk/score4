@@ -1,0 +1,61 @@
+####### Properties File #######
+ztp:
+  allinoneIP: 192.168.10.4
+  useAllInOne: false
+  backoffice:
+    host: http://10.0.9.206
+    port: 8080
+    base: /trading-tools-web
+  webclient:
+    host: http://10.0.9.206
+    port: 8180
+    base: /trading-tools-web-api
+  feeder:
+    jmxhost: 10.0.9.206
+    jmxport: 9891
+  trader:
+    jmxhost: 10.0.9.206
+    jmxport: 9893
+
+feedserver:
+  feedGroupId: 21
+  xmlrpc:
+    host: 10.0.8.25
+    port: 4441
+    user: feeduser
+    pass: feedpass
+
+####### Test Account #######
+account:
+  # useTestAccount means that the suite will not 
+  # create/delete a user in order to run the tests 
+  useTestAccount: false
+  leverage: 25
+  baseCurrency: JPY
+  client:
+    secret: ZnJvbnRlbmRjbGllbnQ6ZnJvbnRlbmRzZWNyZXQ=
+  backoffice:
+    admin:
+      username: admin
+      password: zfpdemo
+  testaccount1:
+    username: 60055
+    pass: abc123
+
+####### Logging Properties #######
+logging:
+  level:
+    root: WARN
+    com:
+      artiofx:
+        testing: INFO
+    org:
+      springframework:
+        security: ERROR
+        web: ERROR
+        test: ERROR
+      hibernate: ERROR
+      apache:
+        commons:
+          dbcp2: ERROR
+
