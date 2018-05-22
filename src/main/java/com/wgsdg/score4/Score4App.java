@@ -10,7 +10,6 @@ public class Score4App {
     private static final Logger logger = LoggerFactory.getLogger(Score4App.class);
 
     public Score4App() {
-        // TODO Auto-generated constructor stub
     }
 
     public static void main(String[] args) {

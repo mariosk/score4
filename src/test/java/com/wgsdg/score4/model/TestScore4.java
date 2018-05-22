@@ -1,11 +1,13 @@
 package com.wgsdg.score4.model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wgsdg.score4.Score4Constants.Score4MoveType;
 import com.wgsdg.score4.game.Score4Game;
 
 public class TestScore4 {
@@ -24,25 +26,31 @@ public class TestScore4 {
     @Test
     public void testInvalidMoves_test1() {
         int[] moves = {-1,2,3};
-        assertFalse(testScore4.checkForValidMove(moves));
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.ERROR_ME);
     }
 
     @Test
     public void testInvalidMoves_test2() {
         int[] moves = {};
-        assertFalse(testScore4.checkForValidMove(moves));
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.ERROR_ME);
     }
 
     @Test
     public void testInvalidMoves_test3() {
-        int[] moves = {-1,3456,2,3};
-        assertFalse(testScore4.checkForValidMove(moves));
+        int[] moves = {1,3456,2,3};
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.ERROR_OPPONENT);
+    }
+
+    @Test
+    public void testInvalidMoves_test4() {
+        int[] moves = {1,1,1,1,1,1,1};
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.ERROR_ME);
     }
 
     @Test
     public void testValidMoves_test1() {
         int[] moves = {1,2,3};
-        assert(testScore4.checkForValidMove(moves));
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.CORRECT);
     }
 
     @Test
@@ -51,6 +59,6 @@ public class TestScore4 {
         for(int i=0; i < moves.length; i++) {
             moves[i] = i % 7 + 1;
          }
-         assert(testScore4.checkForValidMove(moves));
+        assertEquals(testScore4.checkForValidMove(moves), Score4MoveType.CORRECT);
     }
 }
