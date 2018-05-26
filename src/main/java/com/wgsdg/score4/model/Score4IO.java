@@ -1,19 +1,18 @@
 package com.wgsdg.score4.model;
 
+import com.wgsdg.score4.Score4Constants;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * This POJO is used for Input/Output JSON
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Score4IO {
-
-    private String type;
+    private Score4Constants.Score4MoveType type;
     private int[] moves;
-
-    public Score4IO(String type, int[] moves) {
-        this.type = type;
-        this.moves = moves;
-    }
-
 }

@@ -1,5 +1,7 @@
 package com.wgsdg.score4;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Score4Constants {
 
     public static int rowMax = 6;
@@ -19,12 +21,16 @@ public class Score4Constants {
         CORRECT("correct"),
         LOST("i_lost");
 
-        private String value;
-        Score4MoveType(String value) {
-            this.value = value;
+        private String name;
+     
+        // standard constructors
+        Score4MoveType(String name) {
+            this.name = name;
         }
-        public String getValue() {
-            return this.value;
+
+        @JsonValue
+        public String getName() {
+            return name;
         }
     }
 

@@ -52,3 +52,28 @@
   { type: "move", moves: [1,1] }
 
   η λίστα "moves" είναι η λίστα που έλαβε ως input με ένα επιπλέον στοιχείο στο τέλος της λίστας που αποτελλεί την καινούργια κίνηση.
+  
+  
+==================
+  
+mkara@DELLMK MINGW64 /tmp
+$ cat runme.sh
+curl -H "Content-Type: application/json" --data @body.json http://localhost:9090/score4/
+
+mkara@DELLMK MINGW64 /tmp
+$ cat body.json
+{
+        "type": "move",
+        "moves": [1,1]
+}
+
+mkara@DELLMK MINGW64 /tmp
+$ ./runme.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    68    0    32  100    36      8      9  0:00:04  0:00:04 --:--:--    14{"type":"correct","moves":[1,1]}
+
+mkara@DELLMK MINGW64 /tmp
+$
+
+  

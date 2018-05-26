@@ -16,6 +16,7 @@
 package com.wgsdg.score4.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,8 +26,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wgsdg.score4.Score4Constants;
+import com.wgsdg.score4.model.Score4IO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,17 +42,27 @@ public class Score4ControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void noParamScore4ShouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Error"));
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void paramScore4ShouldReturnTailoredMessage() throws Exception {
-        this.mockMvc.perform(get("/score4").param("name", "Spring Community"))
+    public void noParamScore4ShouldReturn404NotFound() throws Exception {
+        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void paramScore4ShouldReturn200OK() throws Exception {
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{1, 2, 3});
+        this.mockMvc.perform(post("/score4/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(score4)))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
+                .andExpect(jsonPath("$.type").value("correct"));
     }
 
 }
