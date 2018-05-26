@@ -6,7 +6,7 @@ import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
 import com.wgsdg.score4.Score4Utils;
-import com.wgsdg.score4.model.Score4Response;
+import com.wgsdg.score4.model.Score4IO;
 
 public class Score4Game {
     static int [][] gameBoard = new int[Score4Constants.rowMax][Score4Constants.colMax];
@@ -47,8 +47,8 @@ public class Score4Game {
         return Score4MoveType.CORRECT;
     }
 
-    public Score4Response play(Score4Response request) {
-        Score4Response response = null;
+    public Score4IO play(Score4IO request) {
+        Score4IO response = null;
         return response;
     }
 }

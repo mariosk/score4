@@ -2,18 +2,19 @@ package com.wgsdg.score4;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class Score4App {
+@ComponentScan("com.wgsdg.score4.controller")
+public class Score4App extends SpringBootServletInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(Score4App.class);
 
-    public Score4App() {
-    }
-
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        SpringApplication.run(Score4App.class, args);
         logger.info("Test");
     }
 
