@@ -8,8 +8,19 @@ public class Score4Constants {
     public static int colMax = 7;
 
     public static enum Player {
-        ME,
-        OPPONENT;
+		ME("ME"), OPPONENT("OP");
+
+		private String name;
+
+		// standard constructors
+		Player(String name) {
+            this.name = name;
+        }
+
+		@JsonValue
+		public String getName() {
+			return name;
+		}
     }
 
     public static enum Score4MoveType {
@@ -23,7 +34,7 @@ public class Score4Constants {
         LOST("i_lost");
 
         private String name;
-     
+
         // standard constructors
         Score4MoveType(String name) {
             this.name = name;

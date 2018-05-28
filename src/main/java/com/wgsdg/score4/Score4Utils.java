@@ -1,9 +1,14 @@
 package com.wgsdg.score4;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wgsdg.score4.Score4Constants.Player;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
 
 public class Score4Utils {
+
+	private static final Logger logger = LoggerFactory.getLogger(Score4Utils.class);
 
 	// Identifying the player index...If the size of the array is even, ME=even move, OPPONENT=odd move
 	public static Player findPlayerByIndex(boolean evenArraySize, int i) {
@@ -18,5 +23,21 @@ public class Score4Utils {
     public static Score4MoveType findErrorByPlayer(Player player) {
         return (player == Player.ME ? Score4MoveType.ERROR_ME : Score4MoveType.ERROR_OPPONENT);
     }
+
+	public static void printGameBoard(int[][] board) {
+		StringBuilder rowBuffer = new StringBuilder(); 
+		for (int row = 0; row < Score4Constants.rowMax; row++) {
+			for (int col = 0; col < Score4Constants.colMax; col++) {
+				if (board[row][col] == -1) {
+					rowBuffer.append("-");
+				} else {
+					rowBuffer.append(Player.values()[board[row][col]].getName());
+				}
+				rowBuffer.append(" ");
+			}
+			logger.info("ROW: {}: {}", row + 1, rowBuffer);
+			rowBuffer.delete(0, rowBuffer.length());
+		}
+	}
 
 }

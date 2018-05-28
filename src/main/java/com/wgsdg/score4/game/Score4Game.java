@@ -2,6 +2,9 @@ package com.wgsdg.score4.game;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
@@ -14,6 +17,7 @@ import com.wgsdg.score4.model.Score4IO;
  * Otherwise the the even moves are ours.  
  */
 public class Score4Game {
+	private static final Logger logger = LoggerFactory.getLogger(Score4Game.class);
 	private static int[][] gameBoard = new int[Score4Constants.rowMax][Score4Constants.colMax];
 
     public Score4Game() {
@@ -52,6 +56,7 @@ public class Score4Game {
                 return moveType;
             };
         }
+		Score4Utils.printGameBoard(gameBoard);
         return Score4MoveType.CORRECT;
     }
 
