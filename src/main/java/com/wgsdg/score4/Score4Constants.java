@@ -16,6 +16,7 @@ public class Score4Constants {
         MOVE("move"),
         DRAW("draw"),
         WON("i_won"),
+		ERROR_SIZE("invalid_size"),
         ERROR_ME("invalid_me"),
         ERROR_OPPONENT("invalid_opponent"),
         CORRECT("correct"),

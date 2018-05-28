@@ -5,9 +5,14 @@ import com.wgsdg.score4.Score4Constants.Score4MoveType;
 
 public class Score4Utils {
 
-    public static Player findPlayerByIndex(int i) {
-        return (i % 2 == 0 ? Player.ME : Player.OPPONENT);
-        
+	// Identifying the player index...If the size of the array is even, ME=even move, OPPONENT=odd move
+	public static Player findPlayerByIndex(boolean evenArraySize, int i) {
+		boolean evenPosition = (i % 2 == 0);
+		if (evenArraySize) {
+			return (evenPosition ? Player.ME : Player.OPPONENT);
+		} else {
+			return (evenPosition ? Player.OPPONENT : Player.ME);
+		}
     }
 
     public static Score4MoveType findErrorByPlayer(Player player) {
