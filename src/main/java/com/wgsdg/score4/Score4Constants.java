@@ -8,7 +8,7 @@ public class Score4Constants {
     public static int colMax = 7;
 
     public static enum Player {
-		ME("ME"), OPPONENT("OP");
+		EMPTY("-"), ME("ME"), OPPONENT("OP");
 
 		private String name;
 

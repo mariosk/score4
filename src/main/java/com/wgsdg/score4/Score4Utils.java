@@ -24,15 +24,11 @@ public class Score4Utils {
         return (player == Player.ME ? Score4MoveType.ERROR_ME : Score4MoveType.ERROR_OPPONENT);
     }
 
-	public static void printGameBoard(int[][] board) {
+	public static void printGameBoard(Player[][] board) {
 		StringBuilder rowBuffer = new StringBuilder(); 
 		for (int row = 0; row < Score4Constants.rowMax; row++) {
 			for (int col = 0; col < Score4Constants.colMax; col++) {
-				if (board[row][col] == -1) {
-					rowBuffer.append("-");
-				} else {
-					rowBuffer.append(Player.values()[board[row][col]].getName());
-				}
+				rowBuffer.append(board[row][col].getName());
 				rowBuffer.append(" ");
 			}
 			logger.info("ROW: {}: {}", row + 1, rowBuffer);
