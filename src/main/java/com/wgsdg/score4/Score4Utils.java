@@ -36,4 +36,12 @@ public class Score4Utils {
 		}
 	}
 
+	public static boolean isArrayEmpty(Player[] array) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != Player.EMPTY) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
