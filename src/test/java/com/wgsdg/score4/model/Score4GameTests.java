@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
+import com.wgsdg.score4.Score4Constants.ScoreBoardType;
 import com.wgsdg.score4.Score4Utils;
 import com.wgsdg.score4.game.Score4Game;
 
@@ -90,18 +91,12 @@ public class Score4GameTests {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		for (int row = 0; row < Score4Constants.rowMax; row++) {
-			Player[] rowsWinners = testScore4.checkRowsForWinner(row);
-			assert (Score4Utils.isArrayEmpty(rowsWinners));
-		}
-		for (int col = 0; col < Score4Constants.colMax; col++) {
-			Player[] colWinners = testScore4.checkColumnsForWinner(col);
-			if (col == 0) {
-				assert (!Score4Utils.isArrayEmpty(colWinners));
-			} else {
-				assert (Score4Utils.isArrayEmpty(colWinners));
-			}
-		}
+
+		Player[] rowsWinners = testScore4.checkForWinner(ScoreBoardType.ROW);
+		assert (Score4Utils.isArrayEmpty(rowsWinners));
+
+		Player[] colWinners = testScore4.checkForWinner(ScoreBoardType.COLUMN);
+		assert (!Score4Utils.isArrayEmpty(colWinners));
 	}
 
 	@Test
@@ -109,18 +104,12 @@ public class Score4GameTests {
 		int[] moves = { 1, 1, 2, 1, 3, 1, 4 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		for (int row = 0; row < Score4Constants.rowMax; row++) {
-			Player[] rowsWinners = testScore4.checkRowsForWinner(row);
-			if (row == 5) {
-				assert (!Score4Utils.isArrayEmpty(rowsWinners));
-			} else {
-				assert (Score4Utils.isArrayEmpty(rowsWinners));
-			}
-		}
-		for (int col = 0; col < Score4Constants.colMax; col++) {
-			Player[] colWinners = testScore4.checkColumnsForWinner(col);
-			assert (Score4Utils.isArrayEmpty(colWinners));
-		}
+
+		Player[] rowsWinners = testScore4.checkForWinner(ScoreBoardType.ROW);
+		assert (!Score4Utils.isArrayEmpty(rowsWinners));
+
+		Player[] colWinners = testScore4.checkForWinner(ScoreBoardType.COLUMN);
+		assert (Score4Utils.isArrayEmpty(colWinners));
 	}
 
 }
