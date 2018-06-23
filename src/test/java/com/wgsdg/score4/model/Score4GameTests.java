@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
-import com.wgsdg.score4.Score4Constants.ScoreBoardType;
-import com.wgsdg.score4.Score4Utils;
 import com.wgsdg.score4.game.Score4Game;
 
 public class Score4GameTests {
@@ -64,7 +62,7 @@ public class Score4GameTests {
 	@Test
 	public void testInvalidMoves_test42() {
 		int[] moves = { 1, 1, 1, 1, 1, 1, 1, 1 }; // 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_ME);
+		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_OPPONENT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
@@ -97,10 +95,7 @@ public class Score4GameTests {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-
-		assertEquals(
-				Score4Utils.findWinner(testScore4.checkForWinner(ScoreBoardType.ROW), testScore4.checkForWinner(ScoreBoardType.COLUMN)),
-				Score4MoveType.LOST);
+		assertEquals(testScore4.findWinner(), Score4MoveType.LOST);
 	}
 
 	@Test
@@ -108,10 +103,7 @@ public class Score4GameTests {
 		int[] moves = { 1, 1, 2, 1, 3, 1, 4 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-
-		assertEquals(
-				Score4Utils.findWinner(testScore4.checkForWinner(ScoreBoardType.ROW), testScore4.checkForWinner(ScoreBoardType.COLUMN)),
-				Score4MoveType.LOST);
+		assertEquals(testScore4.findWinner(), null);
 	}
 
 	@Test
@@ -119,10 +111,7 @@ public class Score4GameTests {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1, 2 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-
-		assertEquals(
-				Score4Utils.findWinner(testScore4.checkForWinner(ScoreBoardType.ROW), testScore4.checkForWinner(ScoreBoardType.COLUMN)),
-				Score4MoveType.DRAW);
+		assertEquals(testScore4.findWinner(), Score4MoveType.DRAW);
 	}
 
 	@Test
@@ -130,10 +119,23 @@ public class Score4GameTests {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1, 3 };
 		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
+		assertEquals(testScore4.findWinner(), Score4MoveType.WON);
+	}
 
-		assertEquals(
-				Score4Utils.findWinner(testScore4.checkForWinner(ScoreBoardType.ROW), testScore4.checkForWinner(ScoreBoardType.COLUMN)),
-				Score4MoveType.WON);
+	@Test
+	public void testDiagWinnerMove_test7() {
+		int[] moves = { 4, 4, 3, 4, 5, 4, 5, 5, 6, 6, 7 };
+		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		logger.info("{}: Moves: {}", name.getMethodName(), moves);
+		assertEquals(testScore4.findWinner(), Score4MoveType.LOST);
+	}
+
+	@Test
+	public void testDiagWinnerMove_test8() {
+		int[] moves = { 3, 4, 4, 2, 4, 5, 4, 5, 5, 6, 6, 7 };
+		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		logger.info("{}: Moves: {}", name.getMethodName(), moves);
+		assertEquals(testScore4.findWinner(), Score4MoveType.DRAW);
 	}
 
 }

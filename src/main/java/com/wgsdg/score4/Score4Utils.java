@@ -24,42 +24,8 @@ public class Score4Utils {
         return (player == Player.ME ? Score4MoveType.ERROR_ME : Score4MoveType.ERROR_OPPONENT);
     }
 
-	public static Score4MoveType findWinner(Player[] rowsWinners, Player[] colsWinners) {
-		Score4MoveType rowsWinner = null;
-		Score4MoveType colsWinner = null;
-		if (!Score4Utils.isArrayEmpty(rowsWinners)) {
-			rowsWinner = findWinner(rowsWinners);
-		}
-		if (!Score4Utils.isArrayEmpty(colsWinners)) {
-			colsWinner = findWinner(colsWinners);
-		}
-		/*
-		 *  The following code catches the cases:
-		 *  1. rowsWinner = OPPONENT, colsWinner = OPPONENT => OPPONENT
-		 *  2. rowsWinner = OPPONENT, colsWinner = ME => DRAW
-		 *  3. rowsWinner = ME, colsWinner = OPPONENT => DRAW
-		 *  4. rowsWinner = ME, colsWinner = ME => ME
-		 *  5. rowsWinner = null, colsWinner = OPPONENT => OPPONENT
-		 *  6. rowsWinner = OPPONENT, colsWinner = null => OPPONENT
-		 *  7. rowsWinner = null, colsWinner = ME => ME
-		 *  8. rowsWinner = ME, colsWinner = null => ME
-		 */
-		// 
-		if (rowsWinner == colsWinner && rowsWinner != null) {
-			return rowsWinner;
-		} else if (rowsWinner != colsWinner && rowsWinner != null && colsWinner != null) {
-			return Score4MoveType.DRAW;
-		} else if (rowsWinner != colsWinner && rowsWinner == null && colsWinner != null) {
-			return colsWinner;
-		} else if (rowsWinner != colsWinner && rowsWinner != null && colsWinner == null) {
-			return rowsWinner;
-		} else {
-			return Score4MoveType.DRAW;
-		}
-	}
-
 	private static Score4MoveType winnerDecission(int opponentPawns, int mePawns) {
-		if (opponentPawns == mePawns) {
+		if (opponentPawns == mePawns && opponentPawns > 0) {
 			return Score4MoveType.DRAW;
 		}
 		if (opponentPawns > mePawns) {
@@ -71,7 +37,7 @@ public class Score4Utils {
 		return null;
 	}
 
-	private static Score4MoveType findWinner(Player[] winners) {
+	public static Score4MoveType findWinner(Player[] winners) {
 		int countOpponent = 0;
 		int countMe = 0;
 		for (int i = 0; i < winners.length; i++) {

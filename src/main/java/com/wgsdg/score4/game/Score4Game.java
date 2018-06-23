@@ -1,6 +1,8 @@
 package com.wgsdg.score4.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
@@ -58,6 +60,24 @@ public class Score4Game {
 		return Player.EMPTY;
 	}
 
+	public Player checkDiagonalForWinner(int col, int row) {
+		pawns = 1;
+		Player startingPawn = gameBoard[row][col];
+		for (int counter = 1; counter <= 4; counter++) {
+			if ((row + counter >= Score4Constants.rowMax) || (col + counter >= Score4Constants.colMax)) {
+				continue;
+			}
+			Player currentPawn = gameBoard[row + counter][col + counter];
+			if (currentPawn == startingPawn) {
+				pawns++;
+			}
+		}
+		if (pawns >= 4) {
+			return startingPawn;
+		}
+		return null;
+	}
+
 	public Player[] checkColumnsForWinner(int col, Player[] colWinner) {
 		pawns = 1;
 		Player currentPawn = Player.EMPTY;
@@ -102,9 +122,63 @@ public class Score4Game {
 			break;
 
 			case DIAGONAL:
+			List<Player> winersList = new ArrayList<Player>();
+			for (int col = 0; col < Score4Constants.colMax; col++) {
+				for (int row = 0; row < Score4Constants.rowMax; row++) {
+					winersList.add(checkDiagonalForWinner(col, row));
+				}
+			}
+			winer = new Player[winersList.size()];
+			winer = winersList.toArray(winer);
 			break;
 		}
 		return winer;
+	}
+
+	private Score4MoveType findWhichWinnerWins(Score4MoveType type1, Score4MoveType type2) {
+		/*
+		 *  The following code catches the cases:
+		 *  1. rowsWinner = OPPONENT, colsWinner = OPPONENT => OPPONENT
+		 *  2. rowsWinner = OPPONENT, colsWinner = ME => DRAW
+		 *  3. rowsWinner = ME, colsWinner = OPPONENT => DRAW
+		 *  4. rowsWinner = ME, colsWinner = ME => ME
+		 *  5. rowsWinner = null, colsWinner = OPPONENT => OPPONENT
+		 *  6. rowsWinner = OPPONENT, colsWinner = null => OPPONENT
+		 *  7. rowsWinner = null, colsWinner = ME => ME
+		 *  8. rowsWinner = ME, colsWinner = null => ME
+		 */
+		if (type1 == type2 && type1 != null) {
+			return type1;
+		} else if (type1 != type2 && type1 != null && type2 != null) {
+			return Score4MoveType.DRAW;
+		} else if (type1 != type2 && type1 == null && type2 != null) {
+			return type2;
+		} else if (type1 != type2 && type1 != null && type2 == null) {
+			return type1;
+		} else {
+			return null;
+		}
+	}
+
+	public Score4MoveType findWinner() {
+		Player[] rowsWinners = checkForWinner(ScoreBoardType.ROW);
+		Player[] colsWinners = checkForWinner(ScoreBoardType.COLUMN);
+		Player[] diagonalWinners = checkForWinner(ScoreBoardType.DIAGONAL);
+		Score4MoveType rowsWinner = null;
+		Score4MoveType colsWinner = null;
+		Score4MoveType diagWinner = null;
+		if (!Score4Utils.isArrayEmpty(rowsWinners)) {
+			rowsWinner = Score4Utils.findWinner(rowsWinners);
+		}
+		if (!Score4Utils.isArrayEmpty(colsWinners)) {
+			colsWinner = Score4Utils.findWinner(colsWinners);
+		}
+		if (!Score4Utils.isArrayEmpty(diagonalWinners)) {
+			diagWinner = Score4Utils.findWinner(diagonalWinners);
+		}
+		Score4MoveType winnerOfRowsAndCols = findWhichWinnerWins(rowsWinner, colsWinner);
+		Score4MoveType winnerOfRowsAndColsAndDiagonals = findWhichWinnerWins(winnerOfRowsAndCols, diagWinner);
+		return winnerOfRowsAndColsAndDiagonals;
 	}
 
 	public Score4Container<Score4MoveType, Player[][]> checkForValidMove(int[] moves) {
@@ -114,7 +188,7 @@ public class Score4Game {
 		}
 
 		boolean evenArraySize = (moves.length % 2 == 0);
-		for (int i = 0; i < moves.length; i++) {
+		for (int i = moves.length - 1; i >= 0; i--) {
 			int currentItem = moves[i] - 1;
 			// Checking the value of each item - negative of > of colMax are not acceptable
 			if (moves[i] > Score4Constants.colMax || moves[i] <= 0) {
