@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Score4Container<M, N> {
-	private M first;
-	private N second;
+	private M moveType;
+	private N board;
 }

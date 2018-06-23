@@ -56,13 +56,53 @@ public class Score4ControllerTests {
     }
 
     @Test
-    public void paramScore4ShouldReturn200OK() throws Exception {
+    public void paramScore4SlashCheckShouldReturn200OK() throws Exception {
         Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{1, 2, 3});
-        this.mockMvc.perform(post("/score4/")
+        this.mockMvc.perform(post("/score4/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(score4)))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.type").value("correct"));
+                .andExpect(jsonPath("$.type").value("continue"));
+    }
+
+    @Test
+    public void paramScore4SlashCheck1() throws Exception {
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{ 1, 2, 1, 2, 1, 2, 1, 3 });
+        this.mockMvc.perform(post("/score4/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(score4)))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("i_won"));
+    }
+
+    @Test
+    public void paramScore4SlashCheck2() throws Exception {
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{ 4, 4, 3, 4, 5, 4, 5, 5, 6, 6, 7 });
+        this.mockMvc.perform(post("/score4/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(score4)))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("i_lost"));
+    }
+
+    @Test
+    public void paramScore4SlashCheck3() throws Exception {
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{ 3, 4, 4, 2, 4, 5, 4, 5, 5, 6, 6, 7 });
+        this.mockMvc.perform(post("/score4/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(score4)))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("draw"));
+    }
+
+    @Test
+    public void paramScore4SlashPlay() throws Exception {
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{1, 2, 3});
+        this.mockMvc.perform(post("/score4/play")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(score4)))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("move"));
     }
 
 }

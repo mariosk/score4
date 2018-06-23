@@ -1,5 +1,7 @@
 package com.wgsdg.score4;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +22,19 @@ public class Score4Utils {
 		}
     }
 
+	// Add one more element in the moves array
+	public static int[] addElement(int[] a, int e) {
+	    a  = Arrays.copyOf(a, a.length + 1);
+	    a[a.length - 1] = e;
+	    return a;
+	}
+
+	// find error by Player type
     public static Score4MoveType findErrorByPlayer(Player player) {
         return (player == Player.ME ? Score4MoveType.ERROR_ME : Score4MoveType.ERROR_OPPONENT);
     }
 
+    // decide which one is the the winner: OPPONENT or ME
 	private static Score4MoveType winnerDecission(int opponentPawns, int mePawns) {
 		if (opponentPawns == mePawns && opponentPawns > 0) {
 			return Score4MoveType.DRAW;
@@ -37,6 +48,7 @@ public class Score4Utils {
 		return null;
 	}
 
+	// find the winner in an single array of Player types
 	public static Score4MoveType findWinner(Player[] winners) {
 		int countOpponent = 0;
 		int countMe = 0;
@@ -50,6 +62,7 @@ public class Score4Utils {
 		return winnerDecission(countOpponent, countMe);
 	}
 
+	// print out the score board
 	public static void printGameBoard(Player[][] board) {
 		StringBuilder rowBuffer = new StringBuilder(); 
 		for (int row = 0; row < Score4Constants.rowMax; row++) {
@@ -62,6 +75,18 @@ public class Score4Utils {
 		}
 	}
 
+	// check whether the score board is empty
+	public static boolean isGameBoardEmpty(Player[][] board) {
+		int emptyRow = 0;
+		for (int row = 0; row < Score4Constants.rowMax; row++) {
+			if (isArrayEmpty(board[row])) {
+				emptyRow++;
+			}
+		}
+		return (emptyRow == Score4Constants.rowMax);
+	}
+
+	// check whether the array is empty or not
 	public static boolean isArrayEmpty(Player[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] != Player.EMPTY) {

@@ -3,6 +3,7 @@ package com.wgsdg.score4.game;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
@@ -39,7 +40,7 @@ public class Score4Game {
 		for (int row = Score4Constants.rowMax - 1; row >= 0; row--) {
 			if (gameBoard[row][col] == Player.EMPTY) {
 				gameBoard[row][col] = player;
-				return Score4MoveType.CORRECT;
+				return Score4MoveType.CONTINUE;
 			}
 		}
 		return (player == Score4Constants.Player.ME ? Score4MoveType.ERROR_ME : Score4MoveType.ERROR_OPPONENT);
@@ -60,7 +61,7 @@ public class Score4Game {
 		return Player.EMPTY;
 	}
 
-	public Player checkDiagonalForWinner(int col, int row) {
+	private Player checkDiagonalForWinner(int col, int row) {
 		pawns = 1;
 		Player startingPawn = gameBoard[row][col];
 		for (int counter = 1; counter <= 4; counter++) {
@@ -78,7 +79,7 @@ public class Score4Game {
 		return null;
 	}
 
-	public Player[] checkColumnsForWinner(int col, Player[] colWinner) {
+	private Player[] checkColumnsForWinner(int col, Player[] colWinner) {
 		pawns = 1;
 		Player currentPawn = Player.EMPTY;
 		for (int row = Score4Constants.rowMax - 1; row > 0; row--) {
@@ -91,7 +92,7 @@ public class Score4Game {
 		return colWinner;
 	}
 
-	public Player[] checkRowsForWinner(int row, Player[] rowWinner) {
+	private Player[] checkRowsForWinner(int row, Player[] rowWinner) {
 		pawns = 1;
 		Player currentPawn = Player.EMPTY;
 		for (int col = 0; col < Score4Constants.colMax; col++) {
@@ -104,7 +105,7 @@ public class Score4Game {
 		return rowWinner;
 	}
 
-	public Player[] checkForWinner(ScoreBoardType type) {
+	private Player[] checkForWinner(ScoreBoardType type) {
 		Player[] winer = null;
 		switch (type) {
 			case ROW:
@@ -160,13 +161,19 @@ public class Score4Game {
 		}
 	}
 
-	public Score4MoveType findWinner() {
-		Player[] rowsWinners = checkForWinner(ScoreBoardType.ROW);
-		Player[] colsWinners = checkForWinner(ScoreBoardType.COLUMN);
-		Player[] diagonalWinners = checkForWinner(ScoreBoardType.DIAGONAL);
+	public Score4MoveType findWinner(int moves[]) {
 		Score4MoveType rowsWinner = null;
 		Score4MoveType colsWinner = null;
 		Score4MoveType diagWinner = null;
+		if (Score4Utils.isGameBoardEmpty(gameBoard)) {
+			Score4MoveType type = checkForValidMove(moves).getMoveType();
+			if (!type.equals(Score4MoveType.CONTINUE)) {
+				return type;
+			}
+		}
+		Player[] rowsWinners = checkForWinner(ScoreBoardType.ROW);
+		Player[] colsWinners = checkForWinner(ScoreBoardType.COLUMN);
+		Player[] diagonalWinners = checkForWinner(ScoreBoardType.DIAGONAL);
 		if (!Score4Utils.isArrayEmpty(rowsWinners)) {
 			rowsWinner = Score4Utils.findWinner(rowsWinners);
 		}
@@ -178,7 +185,7 @@ public class Score4Game {
 		}
 		Score4MoveType winnerOfRowsAndCols = findWhichWinnerWins(rowsWinner, colsWinner);
 		Score4MoveType winnerOfRowsAndColsAndDiagonals = findWhichWinnerWins(winnerOfRowsAndCols, diagWinner);
-		return winnerOfRowsAndColsAndDiagonals;
+		return (winnerOfRowsAndColsAndDiagonals != null ? winnerOfRowsAndColsAndDiagonals : Score4MoveType.CONTINUE);
 	}
 
 	public Score4Container<Score4MoveType, Player[][]> checkForValidMove(int[] moves) {
@@ -196,16 +203,21 @@ public class Score4Game {
 						Score4Utils.findErrorByPlayer(Score4Utils.findPlayerByIndex(evenArraySize, i)), null);
 			}
 			Score4MoveType moveType = storeToBoard(currentItem, Score4Utils.findPlayerByIndex(evenArraySize, i));
-			if (!moveType.equals(Score4MoveType.CORRECT)) {
+			if (!moveType.equals(Score4MoveType.CONTINUE)) {
 				return new Score4Container<Score4MoveType, Player[][]>(moveType, null);
 			}
 		}
 		Score4Utils.printGameBoard(gameBoard);
-		return new Score4Container<Score4MoveType, Player[][]>(Score4MoveType.CORRECT, gameBoard);
+		return new Score4Container<Score4MoveType, Player[][]>(Score4MoveType.CONTINUE, gameBoard);
 	}
 
 	public Score4IO playNextMove(Score4IO request) {
-		Score4IO response = null;
+		Score4IO response = new Score4IO();
+		response.setType(Score4MoveType.MOVE);
+		int[] inputMoves = request.getMoves();
+		Random random = new Random();
+		int[] newMoves = Score4Utils.addElement(inputMoves, random.nextInt(Score4Constants.colMax));
+		response.setMoves(newMoves);
 		return response;
 	}
 }

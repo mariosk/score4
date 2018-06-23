@@ -37,7 +37,7 @@ public class Score4Constants {
 		ERROR_SIZE("invalid_size"),
 		ERROR_ME("invalid_me"),
 		ERROR_OPPONENT("invalid_opponent"),
-		CORRECT("correct");
+		CONTINUE("continue");
 
 		private String name;
 

@@ -34,49 +34,49 @@ public class Score4GameTests {
     @Test
     public void testInvalidMoves_test1() {
 		int[] moves = { -1, 2, 3 }; // 3: OPPONENT, 2: ME, -1: OPPONENT
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_OPPONENT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_OPPONENT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
     @Test
     public void testInvalidMoves_test2() {
         int[] moves = {};
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_SIZE);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_SIZE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
 	}
 
     @Test
     public void testInvalidMoves_test3() {
 		int[] moves = { 1, 3456, 2, 3 }; // 3: OPPONENT, 2: ME, 3456: OPPONENT, 1: ME
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_OPPONENT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_OPPONENT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
     @Test
 	public void testInvalidMoves_test41() {
 		int[] moves = { 1, 1, 1, 1, 1, 1, 1 }; // 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_OPPONENT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_OPPONENT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
 	}
 
 	@Test
 	public void testInvalidMoves_test42() {
 		int[] moves = { 1, 1, 1, 1, 1, 1, 1, 1 }; // 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME, 1: OPPONENT, 1: ME
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_OPPONENT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_OPPONENT);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
 	@Test
 	public void testInvalidMoves_test5() {
 		int[] moves = new int[(Score4Constants.rowMax + 1) * Score4Constants.colMax];
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.ERROR_SIZE);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.ERROR_SIZE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
 	}
 
     @Test
     public void testValidMoves_test1() {
         int[] moves = {1,2,3};
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
@@ -86,56 +86,56 @@ public class Score4GameTests {
         for(int i=0; i < moves.length; i++) {
 			moves[i] = i % Score4Constants.colMax + 1;
 		}
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
     }
 
 	@Test
 	public void testColWinnerMove_test3() {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), Score4MoveType.LOST);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.LOST);
 	}
 
 	@Test
 	public void testRowWinnerMove_test4() {
 		int[] moves = { 1, 1, 2, 1, 3, 1, 4 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), null);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.CONTINUE);
 	}
 
 	@Test
 	public void testDrawMove_test5() {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1, 2 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), Score4MoveType.DRAW);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.DRAW);
 	}
 
 	@Test
 	public void testColWinnerMove_test6() {
 		int[] moves = { 1, 2, 1, 2, 1, 2, 1, 3 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), Score4MoveType.WON);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.WON);
 	}
 
 	@Test
 	public void testDiagWinnerMove_test7() {
 		int[] moves = { 4, 4, 3, 4, 5, 4, 5, 5, 6, 6, 7 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), Score4MoveType.LOST);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.LOST);
 	}
 
 	@Test
 	public void testDiagWinnerMove_test8() {
 		int[] moves = { 3, 4, 4, 2, 4, 5, 4, 5, 5, 6, 6, 7 };
-		assertEquals(testScore4.checkForValidMove(moves).getFirst(), Score4MoveType.CORRECT);
+		assertEquals(testScore4.checkForValidMove(moves).getMoveType(), Score4MoveType.CONTINUE);
 		logger.info("{}: Moves: {}", name.getMethodName(), moves);
-		assertEquals(testScore4.findWinner(), Score4MoveType.DRAW);
+		assertEquals(testScore4.findWinner(moves), Score4MoveType.DRAW);
 	}
 
 }
