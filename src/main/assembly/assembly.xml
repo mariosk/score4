@@ -29,7 +29,7 @@
 			<filtered>true</filtered>
 		</file>
 		<file>
-			<source>src/main/resources/application.yml</source>
+			<source>src/main/resources/application.properties</source>
 			<outputDirectory>./</outputDirectory>
 			<filtered>true</filtered>
 		</file>
