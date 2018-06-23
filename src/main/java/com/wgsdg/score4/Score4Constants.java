@@ -33,11 +33,11 @@ public class Score4Constants {
 		MOVE("move"),
 		DRAW("draw"),
 		WON("i_won"),
+		LOST("i_lost"),
 		ERROR_SIZE("invalid_size"),
 		ERROR_ME("invalid_me"),
 		ERROR_OPPONENT("invalid_opponent"),
-		CORRECT("correct"),
-		LOST("i_lost");
+		CORRECT("correct");
 
 		private String name;
 
