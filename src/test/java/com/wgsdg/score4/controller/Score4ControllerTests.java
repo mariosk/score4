@@ -97,7 +97,7 @@ public class Score4ControllerTests {
 
     @Test
     public void paramScore4SlashPlay() throws Exception {
-        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[]{1, 2, 3});
+        Score4IO score4 = new Score4IO(Score4Constants.Score4MoveType.MOVE, new int[] {1,1,6,6,6,5,3,5,5,4,6,6,4,1,6,2,4,3,4,5,1,1,3});
         this.mockMvc.perform(post("/score4/play")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(score4)))

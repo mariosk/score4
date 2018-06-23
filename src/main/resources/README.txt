@@ -58,7 +58,7 @@
   
 mkara@DELLMK MINGW64 /tmp
 $ cat runme.sh
-curl -H "Content-Type: application/json" --data @body.json http://localhost:9090/score4/
+curl -H "Content-Type: application/json" --data @body.json http://localhost:9090/score4/play
 
 mkara@DELLMK MINGW64 /tmp
 $ cat body.json

@@ -15,7 +15,7 @@ public class Score4App extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(Score4App.class, args);
-        logger.info("Test");
+        logger.info("SpringBoot Application Started...");
     }
 
 }

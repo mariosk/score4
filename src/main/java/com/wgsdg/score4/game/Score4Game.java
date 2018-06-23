@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wgsdg.score4.Score4Constants;
 import com.wgsdg.score4.Score4Constants.Player;
 import com.wgsdg.score4.Score4Constants.Score4MoveType;
@@ -21,19 +24,20 @@ import com.wgsdg.score4.model.Score4IO;
 public class Score4Game {
 	// private static final Logger logger = LoggerFactory.getLogger(Score4Game.class);
 	private static Player[][] gameBoard = new Player[Score4Constants.rowMax][Score4Constants.colMax];
-	private static Player[][] diagonalWinner = new Player[Score4Constants.rowMax][Score4Constants.colMax];
 	private static int pawns = 1;
 	private static Player previousPawn = Player.EMPTY;
 
+    private static final Logger logger = LoggerFactory.getLogger(Score4Game.class);
+
 	public Score4Game() {
+		initGameBoard();
+	}
+
+	private void initGameBoard() {
 		// initialization of the gameBoard with -1
 		for (int i = 0; i < Score4Constants.rowMax; i++) {
 			Arrays.fill(gameBoard[i], Player.EMPTY);
-		}
-
-		for (int i = 0; i < Score4Constants.rowMax; i++) {
-			Arrays.fill(diagonalWinner[i], Player.EMPTY);
-		}
+		}		
 	}
 
 	private Score4MoveType storeToBoard(int col, Player player) {
@@ -211,12 +215,42 @@ public class Score4Game {
 		return new Score4Container<Score4MoveType, Player[][]>(Score4MoveType.CONTINUE, gameBoard);
 	}
 
+	private boolean isErrorInMovesArray(int[] moves) {
+		initGameBoard();
+		Score4MoveType moveType = checkForValidMove(moves).getMoveType();
+		if (moveType.equals(Score4MoveType.ERROR_ME) || 
+			moveType.equals(Score4MoveType.ERROR_OPPONENT) || 
+			moveType.equals(Score4MoveType.ERROR_SIZE)) {
+			logger.error("moves: {}, error returned: {}.", moves, moveType);
+			Score4Utils.printGameBoard(gameBoard);
+			return true;
+		} 
+		return false;
+	}
+
 	public Score4IO playNextMove(Score4IO request) {
 		Score4IO response = new Score4IO();
 		response.setType(Score4MoveType.MOVE);
 		int[] inputMoves = request.getMoves();
+
+		if (isErrorInMovesArray(inputMoves)) {
+			Score4MoveType moveType = checkForValidMove(inputMoves).getMoveType();
+			response.setMoves(inputMoves);
+			response.setType(moveType);
+			return response;
+		}
+
 		Random random = new Random();
-		int[] newMoves = Score4Utils.addElement(inputMoves, random.nextInt(Score4Constants.colMax));
+		int[] newMoves = null;
+
+		while (true) {
+			newMoves = Score4Utils.addElement(inputMoves, random.nextInt(Score4Constants.colMax));
+			if (isErrorInMovesArray(newMoves)) {
+				continue;
+			} else {
+				break;
+			}
+		}
 		response.setMoves(newMoves);
 		return response;
 	}
